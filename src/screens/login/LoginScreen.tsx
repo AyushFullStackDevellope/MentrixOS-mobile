@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AlertTriangle, Moon, Sun, Eye, EyeOff } from "lucide-react-native";
+import { layout } from "../../theme/layout";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
 import { AppButton } from "../../components/common/AppButton";
@@ -241,56 +242,58 @@ export default function LoginScreen({ navigation }: any) {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
 
-            <TopActionButtons
-              onThemeToggle={theme.toggleTheme}
-              AlertIcon={AlertTriangle}
-              ThemeIcon={theme.isDark ? Sun : Moon}
-            />
-
-            <View style={styles.header}>
-              <Image
-                source={
-                  theme.isDark
-                    ? require("../../../assets/logo/logo-dark.png")
-                    : require("../../../assets/logo/logo-light.png")
-                }
-                style={styles.logo}
-                resizeMode="contain"
+            <View style={layout.adaptiveContainer}>
+              <TopActionButtons
+                onThemeToggle={theme.toggleTheme}
+                AlertIcon={AlertTriangle}
+                ThemeIcon={theme.isDark ? Sun : Moon}
               />
-              <AppText style={[styles.title, { color: theme.textPrimary }]}>
-                Mentrix<AppText style={{ color: theme.info }}>OS</AppText>
-              </AppText>
-              <AppText style={[styles.subtitle, { color: theme.textPrimary }]}>
-                <AppText style={styles.boldText}>{LABELS.login.formula.part1}</AppText>
-                <AppText style={[styles.boldText, { color: theme.warning }]}>{LABELS.login.formula.part2}</AppText>
-                <AppText style={styles.boldText}>{LABELS.login.formula.part3}</AppText>
-                <AppText style={[styles.blueMetrics, styles.boldText]}>{LABELS.login.formula.part4}</AppText>
-              </AppText>
-              <AppText style={[styles.subline, { color: theme.textSecondary }]}>
-                {LABELS.login.subline.part1}
-                <AppText style={[styles.boldText, { color: theme.textPrimary }]}>{LABELS.login.subline.part2}</AppText>
-                {LABELS.login.subline.part3}
-              </AppText>
-            </View>
 
-            <View style={styles.formArea}>
-              {renderInputArea()}
-              {renderActionArea()}
-              {(authState === "initial" || authState === "email-options" || authState === "phone-options") && (
-                <>
-                  <DividerWithText text={LABELS.login.or} />
-                  <JoinInstituteButton onPress={() => {}} />
-                </>
-              )}
-            </View>
+              <View style={styles.header}>
+                <Image
+                  source={
+                    theme.isDark
+                      ? require("../../../assets/logo/logo-dark.png")
+                      : require("../../../assets/logo/logo-light.png")
+                  }
+                  style={styles.logo}
+                  resizeMode="contain"
+                />
+                <AppText style={[styles.title, { color: theme.textPrimary }]}>
+                  Mentrix<AppText style={{ color: theme.info }}>OS</AppText>
+                </AppText>
+                <AppText style={[styles.subtitle, { color: theme.textPrimary }]}>
+                  <AppText style={styles.boldText}>{LABELS.login.formula.part1}</AppText>
+                  <AppText style={[styles.boldText, { color: theme.warning }]}>{LABELS.login.formula.part2}</AppText>
+                  <AppText style={styles.boldText}>{LABELS.login.formula.part3}</AppText>
+                  <AppText style={[styles.blueMetrics, styles.boldText]}>{LABELS.login.formula.part4}</AppText>
+                </AppText>
+                <AppText style={[styles.subline, { color: theme.textSecondary }]}>
+                  {LABELS.login.subline.part1}
+                  <AppText style={[styles.boldText, { color: theme.textPrimary }]}>{LABELS.login.subline.part2}</AppText>
+                  {LABELS.login.subline.part3}
+                </AppText>
+              </View>
 
-            <View style={styles.marketingContainer}>
-              <AppText style={[styles.marketingBold, { color: theme.textPrimary }]}>{LABELS.login.marketingBold}</AppText>
-              <AppText style={[styles.marketingLight, { color: theme.textSecondary }]}>{LABELS.login.marketingLight}</AppText>
-            </View>
+              <View style={styles.formArea}>
+                {renderInputArea()}
+                {renderActionArea()}
+                {(authState === "initial" || authState === "email-options" || authState === "phone-options") && (
+                  <>
+                    <DividerWithText text={LABELS.login.or} />
+                    <JoinInstituteButton onPress={() => {}} />
+                  </>
+                )}
+              </View>
 
-            <SetupInstituteCard onPress={() => {}} />
-            <TermsFooter />
+              <View style={styles.marketingContainer}>
+                <AppText style={[styles.marketingBold, { color: theme.textPrimary }]}>{LABELS.login.marketingBold}</AppText>
+                <AppText style={[styles.marketingLight, { color: theme.textSecondary }]}>{LABELS.login.marketingLight}</AppText>
+              </View>
+
+              <SetupInstituteCard onPress={() => {}} />
+              <TermsFooter />
+            </View>
 
           </ScrollView>
         </TouchableWithoutFeedback>

@@ -3,6 +3,7 @@ import { View, StyleSheet, TextInput, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search } from "lucide-react-native";
 import { LABELS } from "../../i18n/en";
+import { layout } from "../../theme/layout";
 import InstituteCard from "../../components/institute/InstituteCard";
 import AppText from "../../components/common/AppText";
 import AppHeader from "../../components/common/AppHeader";
@@ -61,63 +62,65 @@ export default function InstituteSelectionScreen({ navigation }: any) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <AppHeader />
+        <View style={layout.adaptiveContainer}>
+          <AppHeader />
 
-        <View style={styles.heroSection}>
-          <AppText style={[styles.greeting, { color: theme.textPrimary }]}>
-            {`Hi, ${user?.full_name?.split(' ')[0] || 'Ayush'}`}
-          </AppText>
-          <AppText style={[styles.subtitle, { color: theme.textSecondary }]}>
-            {LABELS.institute.subtitle}
+          <View style={styles.heroSection}>
+            <AppText style={[styles.greeting, { color: theme.textPrimary }]}>
+              {`Hi, ${user?.full_name?.split(' ')[0] || 'Ayush'}`}
+            </AppText>
+            <AppText style={[styles.subtitle, { color: theme.textSecondary }]}>
+              {LABELS.institute.subtitle}
+            </AppText>
+          </View>
+
+          <View style={[styles.searchBox, { backgroundColor: theme.card, borderColor: theme.border }]}>
+            <Search size={18} color={theme.textSecondary} style={styles.searchIcon} />
+            <TextInput
+              placeholder={LABELS.institute.searchPlaceholder}
+              placeholderTextColor={theme.textSecondary}
+              value={search}
+              onChangeText={setSearch}
+              style={[styles.searchInput, { color: theme.textPrimary }]}
+            />
+          </View>
+
+          <View style={styles.listSection}>
+            {filteredInstitutes.length === 0 ? (
+              <View style={[styles.emptyBox, { backgroundColor: theme.card, borderColor: theme.border }]}>
+                <AppText style={[styles.emptyTitle, { color: theme.textPrimary }]}>
+                  {LABELS.institute.emptyTitle}
+                </AppText>
+                <AppText style={[styles.emptySubtitle, { color: theme.textSecondary }]}>
+                  {LABELS.institute.emptySubtitle}
+                </AppText>
+              </View>
+            ) : (
+              filteredInstitutes.map((item: Institute) => (
+                <InstituteCard
+                  key={item.institute_id}
+                  item={{
+                    id: item.institute_id.toString(),
+                    name: item.institute_name,
+                    city: item.city,
+                    state: item.state,
+                    type: item.type,
+                    logo: item.logo || undefined,
+                  }}
+                  search={search}
+                  onPress={() => handleSelectInstitute(item)}
+                />
+              ))
+            )}
+          </View>
+
+          <AppText style={[styles.supportText, { color: theme.textSecondary }]}>
+            {LABELS.institute.supportText}
+            <AppText style={[styles.supportEmail, { color: theme.info }]}>
+              {LABELS.common.supportEmail}
+            </AppText>
           </AppText>
         </View>
-
-        <View style={[styles.searchBox, { backgroundColor: theme.card, borderColor: theme.border }]}>
-          <Search size={18} color={theme.textSecondary} style={styles.searchIcon} />
-          <TextInput
-            placeholder={LABELS.institute.searchPlaceholder}
-            placeholderTextColor={theme.textSecondary}
-            value={search}
-            onChangeText={setSearch}
-            style={[styles.searchInput, { color: theme.textPrimary }]}
-          />
-        </View>
-
-        <View style={styles.listSection}>
-          {filteredInstitutes.length === 0 ? (
-            <View style={[styles.emptyBox, { backgroundColor: theme.card, borderColor: theme.border }]}>
-              <AppText style={[styles.emptyTitle, { color: theme.textPrimary }]}>
-                {LABELS.institute.emptyTitle}
-              </AppText>
-              <AppText style={[styles.emptySubtitle, { color: theme.textSecondary }]}>
-                {LABELS.institute.emptySubtitle}
-              </AppText>
-            </View>
-          ) : (
-            filteredInstitutes.map((item: Institute) => (
-              <InstituteCard
-                key={item.institute_id}
-                item={{
-                  id: item.institute_id.toString(),
-                  name: item.institute_name,
-                  city: item.city,
-                  state: item.state,
-                  type: item.type,
-                  logo: item.logo || undefined,
-                }}
-                search={search}
-                onPress={() => handleSelectInstitute(item)}
-              />
-            ))
-          )}
-        </View>
-
-        <AppText style={[styles.supportText, { color: theme.textSecondary }]}>
-          {LABELS.institute.supportText}
-          <AppText style={[styles.supportEmail, { color: theme.info }]}>
-            {LABELS.common.supportEmail}
-          </AppText>
-        </AppText>
       </ScrollView>
     </SafeAreaView>
   );

@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Moon, Sun, Bell } from "lucide-react-native";
 import AppText from "../../components/common/AppText";
 import AppHeader from "../../components/common/AppHeader";
+import { layout } from "../../theme/layout";
 import { useTheme } from "../../hooks/useTheme";
 import { useAuth } from "../../hooks/useAuth";
 import type { AppStackParamList } from "../../navigation/AppNavigator";
@@ -55,81 +56,83 @@ export default function DashboardScreen({ route }: DashboardScreenProps) {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <ScrollView contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
         
-        <AppHeader 
-          rightSlot={
-            <View style={styles.headerRight}>
-              {/* Notifications / Alert Icon (Matching Login Style) */}
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={[styles.iconButton, { backgroundColor: theme.card, borderColor: theme.border }]}
-              >
-                <Bell size={20} color={theme.textPrimary} />
-              </TouchableOpacity>
+        <View style={layout.adaptiveContainer}>
+          <AppHeader 
+            rightSlot={
+              <View style={styles.headerRight}>
+                {/* Notifications / Alert Icon (Matching Login Style) */}
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={[styles.iconButton, { backgroundColor: theme.card, borderColor: theme.border }]}
+                >
+                  <Bell size={20} color={theme.textPrimary} />
+                </TouchableOpacity>
 
-              {/* Theme Toggle (Matching Login Style) */}
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={theme.toggleTheme}
-                style={[styles.iconButton, { backgroundColor: theme.card, borderColor: theme.border }]}
-              >
-                {theme.isDark ? (
-                  <Sun size={20} color={theme.textPrimary} />
-                ) : (
-                  <Moon size={20} color={theme.textPrimary} />
-                )}
-              </TouchableOpacity>
+                {/* Theme Toggle (Matching Login Style) */}
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={theme.toggleTheme}
+                  style={[styles.iconButton, { backgroundColor: theme.card, borderColor: theme.border }]}
+                >
+                  {theme.isDark ? (
+                    <Sun size={20} color={theme.textPrimary} />
+                  ) : (
+                    <Moon size={20} color={theme.textPrimary} />
+                  )}
+                </TouchableOpacity>
 
-              {/* Profile Avatar (Click for Logout Alert) */}
-              <TouchableOpacity activeOpacity={0.7} onPress={handleLogout}>
-                <View style={[styles.avatarCircle, { backgroundColor: "#E98C45", borderColor: theme.border }]}>
-                  <AppText style={styles.initialsText}>
-                    {user?.full_name ? (user.full_name.split(' ')[0][0] + (user.full_name.split(' ').length > 1 ? user.full_name.split(' ')[1][0] : '')).toUpperCase() : "MJ"}
-                  </AppText>
-                </View>
-              </TouchableOpacity>
-            </View>
-          }
-        />
+                {/* Profile Avatar (Click for Logout Alert) */}
+                <TouchableOpacity activeOpacity={0.7} onPress={handleLogout}>
+                  <View style={[styles.avatarCircle, { backgroundColor: "#E98C45", borderColor: theme.border }]}>
+                    <AppText style={styles.initialsText}>
+                      {user?.full_name ? (user.full_name.split(' ')[0][0] + (user.full_name.split(' ').length > 1 ? user.full_name.split(' ')[1][0] : '')).toUpperCase() : "MJ"}
+                    </AppText>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            }
+          />
 
-        {/* Welcome Section */}
-        <View style={styles.welcomeSection}>
-          <AppText style={[styles.welcomeTitle, { color: theme.textPrimary }]}>
-            Welcome to MentrixOS
-          </AppText>
-          <AppText style={styles.userName}>
-            {user?.full_name || "Michael Johnson"}
-          </AppText>
-        </View>
-
-        {/* Stats Grid */}
-        <View style={styles.statsGrid}>
-          <View style={styles.statsRow}>
-            <StatCard 
-              count="08" 
-              label="Active Institutes" 
-              description="Institutes actively operating and using the platform." 
-              countColor="#2563EB" 
-            />
-            <StatCard 
-              count="05" 
-              label="Inactive Institutes" 
-              description="Institutes currently inactive in system." 
-              countColor="#10B981" 
-            />
+          {/* Welcome Section */}
+          <View style={styles.welcomeSection}>
+            <AppText style={[styles.welcomeTitle, { color: theme.textPrimary }]}>
+              Welcome to MentrixOS
+            </AppText>
+            <AppText style={styles.userName}>
+              {user?.full_name || "Michael Johnson"}
+            </AppText>
           </View>
-          <View style={styles.statsRow}>
-            <StatCard 
-              count="15+" 
-              label="Total Modules" 
-              description="Features enabling workflows." 
-              countColor="#F59E0B" 
-            />
-            <StatCard 
-              count="50+" 
-              label="Total Users" 
-              description="Registered users across institutes." 
-              countColor="#8B5CF6" 
-            />
+
+          {/* Stats Grid */}
+          <View style={styles.statsGrid}>
+            <View style={styles.statsRow}>
+              <StatCard 
+                count="08" 
+                label="Active Institutes" 
+                description="Institutes actively operating and using the platform." 
+                countColor="#2563EB" 
+              />
+              <StatCard 
+                count="05" 
+                label="Inactive Institutes" 
+                description="Institutes currently inactive in system." 
+                countColor="#10B981" 
+              />
+            </View>
+            <View style={styles.statsRow}>
+              <StatCard 
+                count="15+" 
+                label="Total Modules" 
+                description="Features enabling workflows." 
+                countColor="#F59E0B" 
+              />
+              <StatCard 
+                count="50+" 
+                label="Total Users" 
+                description="Registered users across institutes." 
+                countColor="#8B5CF6" 
+              />
+            </View>
           </View>
         </View>
 
