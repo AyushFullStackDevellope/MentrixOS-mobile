@@ -3,6 +3,7 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import type { ViewStyle, TextStyle } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
 import AppText from "./AppText";
+import { spacing, radius, typography } from "../../theme";
 
 interface AppButtonProps {
   title: string;
@@ -73,7 +74,7 @@ export const AppButton: React.FC<AppButtonProps> = ({
 const styles = StyleSheet.create({
   btn: {
     height: 50,
-    borderRadius: 12,
+    borderRadius: radius.md,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   text: {
     color: "#fff",
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: typography.body1?.fontSize || 16,
   },
 });
 

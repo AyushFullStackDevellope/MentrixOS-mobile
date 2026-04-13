@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storage } from "./storage";
 import { STORAGE_KEYS } from "../constants/storageKeys";
 import type { Institute, InstituteRole, User } from "../types/session";
 
-const parseStoredJson = <T>(value: string | null, fallback: T): T => {
+const parseStoredJson = <T>(value: string | undefined, fallback: T): T => {
   if (!value) {
     return fallback;
   }
@@ -15,64 +15,62 @@ const parseStoredJson = <T>(value: string | null, fallback: T): T => {
 };
 
 export const savePreContextToken = async (token: string) => {
-  await AsyncStorage.setItem(STORAGE_KEYS.PRE_CONTEXT_TOKEN, token);
+  storage.set(STORAGE_KEYS.PRE_CONTEXT_TOKEN, token);
 };
 
 export const getPreContextToken = async () => {
-  return await AsyncStorage.getItem(STORAGE_KEYS.PRE_CONTEXT_TOKEN);
+  return storage.getString(STORAGE_KEYS.PRE_CONTEXT_TOKEN) || null;
 };
 
 export const saveAccessToken = async (token: string) => {
-  await AsyncStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+  storage.set(STORAGE_KEYS.ACCESS_TOKEN, token);
 };
 
 export const getAccessToken = async () => {
-  return await AsyncStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+  return storage.getString(STORAGE_KEYS.ACCESS_TOKEN) || null;
 };
 
 export const saveUser = async (user: User) => {
-  await AsyncStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+  storage.set(STORAGE_KEYS.USER, JSON.stringify(user));
 };
 
 export const getUser = async (): Promise<User | null> => {
-  const value = await AsyncStorage.getItem(STORAGE_KEYS.USER);
+  const value = storage.getString(STORAGE_KEYS.USER);
   return parseStoredJson<User | null>(value, null);
 };
 
 export const saveInstitutes = async (institutes: Institute[]) => {
-  await AsyncStorage.setItem(STORAGE_KEYS.INSTITUTES, JSON.stringify(institutes));
+  storage.set(STORAGE_KEYS.INSTITUTES, JSON.stringify(institutes));
 };
 
 export const getInstitutes = async (): Promise<Institute[]> => {
-  const value = await AsyncStorage.getItem(STORAGE_KEYS.INSTITUTES);
+  const value = storage.getString(STORAGE_KEYS.INSTITUTES);
   return parseStoredJson<Institute[]>(value, []);
 };
 
 export const saveSelectedInstitute = async (institute: Institute) => {
-  await AsyncStorage.setItem(STORAGE_KEYS.SELECTED_INSTITUTE, JSON.stringify(institute));
+  storage.set(STORAGE_KEYS.SELECTED_INSTITUTE, JSON.stringify(institute));
 };
 
 export const getSelectedInstitute = async (): Promise<Institute | null> => {
-  const value = await AsyncStorage.getItem(STORAGE_KEYS.SELECTED_INSTITUTE);
+  const value = storage.getString(STORAGE_KEYS.SELECTED_INSTITUTE);
   return parseStoredJson<Institute | null>(value, null);
 };
 
 export const saveSelectedRole = async (role: InstituteRole) => {
-  await AsyncStorage.setItem(STORAGE_KEYS.SELECTED_ROLE, JSON.stringify(role));
+  storage.set(STORAGE_KEYS.SELECTED_ROLE, JSON.stringify(role));
 };
 
 export const getSelectedRole = async (): Promise<InstituteRole | null> => {
-  const value = await AsyncStorage.getItem(STORAGE_KEYS.SELECTED_ROLE);
+  const value = storage.getString(STORAGE_KEYS.SELECTED_ROLE);
   return parseStoredJson<InstituteRole | null>(value, null);
 };
 
 export const clearSession = async () => {
-  await Promise.all([
-    AsyncStorage.removeItem(STORAGE_KEYS.PRE_CONTEXT_TOKEN),
-    AsyncStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN),
-    AsyncStorage.removeItem(STORAGE_KEYS.USER),
-    AsyncStorage.removeItem(STORAGE_KEYS.INSTITUTES),
-    AsyncStorage.removeItem(STORAGE_KEYS.SELECTED_INSTITUTE),
-    AsyncStorage.removeItem(STORAGE_KEYS.SELECTED_ROLE),
-  ]);
+  storage.remove(STORAGE_KEYS.PRE_CONTEXT_TOKEN);
+  storage.remove(STORAGE_KEYS.ACCESS_TOKEN);
+  storage.remove(STORAGE_KEYS.USER);
+  storage.remove(STORAGE_KEYS.INSTITUTES);
+  storage.remove(STORAGE_KEYS.SELECTED_INSTITUTE);
+  storage.remove(STORAGE_KEYS.SELECTED_ROLE);
 };

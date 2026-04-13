@@ -14,6 +14,7 @@ import {
 } from "lucide-react-native";
 import { LABELS } from "../../i18n/en";
 import { layout } from "../../theme/layout";
+import { spacing, radius, typography } from "../../theme";
 import AppText from "../../components/common/AppText";
 import AppHeader from "../../components/common/AppHeader";
 import { useTheme } from "../../hooks/useTheme";
@@ -206,35 +207,35 @@ export default function RoleSelectionScreen({ navigation, route }: RoleSelection
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1 },
-  contentContainer: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 48 },
+  contentContainer: { paddingHorizontal: spacing.xl, paddingTop: spacing.md, paddingBottom: spacing.xxxl },
   changeInstituteButton: {
     alignSelf: "center",
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderRadius: 50,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginBottom: 20,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.sm, // approx 10
+    marginBottom: spacing.xl,
   },
   backIcon: { marginRight: 6 },
-  changeInstituteText: { fontSize: 14, fontWeight: "600" },
+  changeInstituteText: { fontSize: typography.body2.fontSize, fontWeight: "600" },
   selectedInstituteCard: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1.5,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 28,
+    borderRadius: radius.xl,
+    padding: spacing.lg,
+    marginBottom: spacing.xxl,
   },
   selectedInstituteLogoBox: {
     width: 48,
     height: 48,
-    borderRadius: 10,
+    borderRadius: radius.md,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 14,
+    marginRight: spacing.md,
     backgroundColor: '#FFFFFF', // White background for the logo itself
     overflow: 'hidden',
   },
@@ -242,22 +243,22 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
   },
-  selectedInstituteLogoText: { fontSize: 22, fontWeight: "800" },
+  selectedInstituteLogoText: { fontSize: typography.h3?.fontSize || 22, fontWeight: "800" },
   selectedInstituteInfo: { flex: 1 },
-  selectedInstituteName: { fontSize: 16, fontWeight: "700", marginBottom: 4 },
+  selectedInstituteName: { fontSize: typography.body1?.fontSize || 16, fontWeight: "700", marginBottom: spacing.xs },
   selectedInstituteMetaRow: { flexDirection: "row", alignItems: "center" },
-  metaIcon: { marginRight: 4 },
-  selectedInstituteMeta: { fontSize: 13, fontWeight: "400" },
-  heroSection: { alignItems: "center", marginBottom: 24 },
-  title: { fontSize: 28, fontWeight: "800", letterSpacing: -0.5, textAlign: "center", marginBottom: 6 },
-  subtitle: { fontSize: 14, lineHeight: 20, textAlign: "center", fontWeight: "400" },
-  roleList: { marginBottom: 16 },
+  metaIcon: { marginRight: spacing.xs },
+  selectedInstituteMeta: { fontSize: typography.caption.fontSize, fontWeight: "400" },
+  heroSection: { alignItems: "center", marginBottom: spacing.xxl },
+  title: { fontSize: typography.h1.fontSize || 28, fontWeight: "800", letterSpacing: -0.5, textAlign: "center", marginBottom: 6 },
+  subtitle: { fontSize: typography.body2.fontSize, lineHeight: 20, textAlign: "center", fontWeight: "400" },
+  roleList: { marginBottom: spacing.lg },
   roleCard: {
-    borderRadius: 16,
+    borderRadius: radius.xl,
     borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    marginBottom: 12,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md, // approx 14
+    marginBottom: spacing.md,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -266,20 +267,20 @@ const styles = StyleSheet.create({
   roleIconBox: {
     width: 44,
     height: 44,
-    borderRadius: 12,
+    borderRadius: radius.lg,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 14,
+    marginRight: spacing.md,
   },
-  roleTitle: { fontSize: 16, fontWeight: "700" },
+  roleTitle: { fontSize: typography.body1.fontSize, fontWeight: "700" },
   roleArrowBox: {
     width: 36,
     height: 36,
-    borderRadius: 8,
+    borderRadius: radius.md,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  supportText: { fontSize: 13, textAlign: "center", marginTop: 48, lineHeight: 20 },
+  supportText: { fontSize: typography.caption.fontSize, textAlign: "center", marginTop: spacing.xxxl, lineHeight: 20 },
   supportEmail: { fontWeight: "600" },
 });

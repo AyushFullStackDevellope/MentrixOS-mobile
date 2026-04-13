@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   message: {
-    marginTop: spacing.m,
+    marginTop: spacing.md,
     fontWeight: '500',
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   Alert,
   ActivityIndicator,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AlertTriangle, Moon, Sun, Eye, EyeOff } from "lucide-react-native";
@@ -20,6 +21,7 @@ import { useTheme } from "../../hooks/useTheme";
 import { AppButton } from "../../components/common/AppButton";
 import { AppInput } from "../../components/common/AppInput";
 import AppText from "../../components/common/AppText";
+import { spacing, radius, typography } from "../../theme";
 import {
   TopActionButtons,
   DividerWithText,
@@ -43,6 +45,18 @@ export default function LoginScreen({ navigation }: any) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputRef = useRef<TextInput>(null);
+
+  // ── Focus Restoration ────────────────────────────────────────────────────
+  // Ensures identifier input keeps focus when layout switches (e.g. from email to phone)
+  useEffect(() => {
+    if (authState === "initial" || authState === "email-options" || authState === "phone-options") {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [authState]);
 
   // API state
   const [loading, setLoading] = useState(false);
@@ -52,12 +66,19 @@ export default function LoginScreen({ navigation }: any) {
   const handleInputChange = (text: string) => {
     setInputVal(text);
     setPassword(""); // clear password if user changes email
+    
+    // Check if we need to switch state (which might cause layout change/focus loss)
+    let newState: AuthState = "initial";
     if (text.length === 0) {
-      setAuthState("initial");
+      newState = "initial";
     } else if (/[a-zA-Z@]/.test(text)) {
-      setAuthState("email-options");
+      newState = "email-options";
     } else {
-      setAuthState("phone-options");
+      newState = "phone-options";
+    }
+
+    if (newState !== authState) {
+      setAuthState(newState);
     }
   };
 
@@ -142,6 +163,8 @@ export default function LoginScreen({ navigation }: any) {
             <AppText style={[styles.countryCodeText, { color: theme.textPrimary }]}>+91</AppText>
           </View>
           <AppInput
+            key="phone-input"
+            ref={inputRef}
             containerStyle={styles.phoneInput}
             placeholder={LABELS.login.phoneNumber}
             value={inputVal}
@@ -154,13 +177,15 @@ export default function LoginScreen({ navigation }: any) {
     }
     return (
       <AppInput
+        key="email-input"
+        ref={inputRef}
         placeholder={LABELS.login.phoneOrEmail}
         value={inputVal}
         onChangeText={handleInputChange}
         autoCapitalize="none"
         keyboardType="email-address"
-        // Always editable — user can tap and change email even when password field is shown
-        editable={authState !== "email-otp"}
+        // Disabled when in password or otp states
+        editable={authState === "initial" || authState === "email-options"}
       />
     );
   };
@@ -201,6 +226,12 @@ export default function LoginScreen({ navigation }: any) {
               <AppText style={[styles.resendLink, { color: theme.info }]}>{LABELS.login.resendCode}</AppText>
             </AppText>
             <AppButton title={LABELS.login.continueBtn} onPress={() => {}} />
+            <TouchableOpacity 
+              onPress={() => setAuthState(authState === "email-otp" ? "email-options" : "phone-options")}
+              style={styles.backButton}
+            >
+              <AppText style={[styles.backText, { color: theme.textSecondary }]}>Back</AppText>
+            </TouchableOpacity>
           </View>
         );
 
@@ -231,6 +262,12 @@ export default function LoginScreen({ navigation }: any) {
             ) : (
               <AppButton title={LABELS.login.continueBtn} onPress={handleLogin} />
             )}
+            <TouchableOpacity 
+              onPress={() => setAuthState("email-options")}
+              style={styles.backButton}
+            >
+              <AppText style={[styles.backText, { color: theme.textSecondary }]}>Back</AppText>
+            </TouchableOpacity>
           </View>
         );
     }
@@ -306,75 +343,84 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1 },
   keyboardAvoidingView: { flex: 1 },
   scrollContent: {
-    paddingHorizontal: 24,
-    paddingTop: 10,
-    paddingBottom: 20,
+    paddingHorizontal: spacing.xxl,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xl,
     flexGrow: 1,
   },
   header: {
     alignItems: "center",
-    marginBottom: 36,
+    marginBottom: spacing.xxxl,
   },
   logo: { width: 64, height: 64 },
   title: {
-    fontSize: 32,
+    fontSize: typography.h1.fontSize || 32,
     fontWeight: "800",
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: spacing.sm,
+    marginBottom: spacing.lg,
   },
-  subtitle: { fontSize: 14, marginBottom: 4 },
-  subline: { fontSize: 13 },
-  formArea: { marginBottom: 30 },
+  subtitle: { fontSize: typography.body2.fontSize, marginBottom: spacing.xs },
+  subline: { fontSize: typography.caption.fontSize },
+  formArea: { marginBottom: spacing.xxl },
   phoneInputContainer: {
     flexDirection: "row",
-    gap: 12,
+    gap: spacing.md,
   },
   countryCode: {
     flexDirection: "row",
     alignItems: "center",
     height: 54,
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.lg,
     borderWidth: 1,
-    borderRadius: 12,
-    gap: 8,
+    borderRadius: radius.lg,
+    gap: spacing.sm,
   },
-  countryCodeText: { fontSize: 16, fontWeight: "500" },
+  countryCodeText: { fontSize: typography.body1.fontSize, fontWeight: "500" },
   phoneInput: { flex: 1 },
   rowButtons: {
-    marginTop: 16,
+    marginTop: spacing.lg,
     flexDirection: "row",
-    gap: 12,
+    gap: spacing.md,
   },
   otpHeading: {
-    fontSize: 16,
+    fontSize: typography.body1.fontSize,
     fontWeight: "500",
-    marginBottom: 16,
+    marginBottom: spacing.lg,
   },
-  resendText: { fontSize: 14, marginBottom: 24 },
+  resendText: { fontSize: typography.body2.fontSize, marginBottom: spacing.xxl },
   forgotPassword: {
     textAlign: "right",
-    fontSize: 14,
+    fontSize: typography.body2.fontSize,
     fontWeight: "500",
-    marginBottom: 24,
+    marginBottom: spacing.xxl,
     marginTop: -4,
   },
   marketingContainer: {
     alignItems: "center",
     marginTop: "auto",
-    marginBottom: 10,
+    marginBottom: spacing.md,
   },
   marketingBold: {
-    fontSize: 14,
+    fontSize: typography.body2.fontSize,
     fontWeight: "800",
     marginBottom: 6,
   },
-  marketingLight: { fontSize: 13, textAlign: "center" },
-  flagText: { fontSize: 18 },
-  actionContainer: { marginTop: 16 },
+  marketingLight: { fontSize: typography.caption.fontSize, textAlign: "center" },
+  flagText: { fontSize: typography.body1?.fontSize || 18 },
+  actionContainer: { marginTop: spacing.lg },
   flex1: { flex: 1 },
   resendLink: { fontWeight: "500" },
-  passwordInputSpacing: { marginBottom: 16 },
+  passwordInputSpacing: { marginBottom: spacing.lg },
   boldText: { fontWeight: "700" },
   blueMetrics: { color: "#0073FF" },
   grayText: { color: "#6B7280" },
+  backButton: {
+    marginTop: spacing.lg,
+    alignItems: "center",
+  },
+  backText: {
+    fontSize: typography.body2.fontSize,
+    fontWeight: "500",
+    textDecorationLine: "underline",
+  },
 });

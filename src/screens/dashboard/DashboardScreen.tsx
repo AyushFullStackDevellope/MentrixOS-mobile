@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Moon, Sun, Bell } from "lucide-react-native";
 import AppText from "../../components/common/AppText";
 import AppHeader from "../../components/common/AppHeader";
-import { layout } from "../../theme/layout";
+import { layout, spacing, radius, typography } from "../../theme";
 import { useTheme } from "../../hooks/useTheme";
 import { useAuth } from "../../hooks/useAuth";
 import type { AppStackParamList } from "../../navigation/AppNavigator";
@@ -144,39 +144,38 @@ export default function DashboardScreen({ route }: DashboardScreenProps) {
 const styles = StyleSheet.create({
   safeArea: { flex: 1 },
   contentContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 40,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xxxl,
   },
   
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: spacing.sm,
   },
 
   // Icon Button Style (Matches AuthComponents.tsx)
   iconButton: {
     width: 44,
     height: 44,
-    borderRadius: 8,
+    borderRadius: radius.md,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  // Profile Avatar
   avatarCircle: {
     width: 44,
     height: 44,
-    borderRadius: 22,
+    borderRadius: radius.pill,
     borderWidth: 1.5,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 4,
+    marginLeft: spacing.xs,
   },
   initialsText: {
-    fontSize: 16,
+    fontSize: typography.body1.fontSize,
     fontWeight: '700',
     color: '#FFF',
   },
@@ -184,17 +183,17 @@ const styles = StyleSheet.create({
   // Welcome Section
   welcomeSection: {
     alignItems: "center",
-    marginTop: 32,
-    marginBottom: 40,
+    marginTop: spacing.xxl,
+    marginBottom: spacing.xxxl,
   },
   welcomeTitle: {
-    fontSize: 26,
+    fontSize: typography.h2.fontSize,
     fontWeight: "800",
-    marginBottom: 8,
+    marginBottom: spacing.sm,
     textAlign: "center",
   },
   userName: {
-    fontSize: 28,
+    fontSize: typography.h1.fontSize, // approx mapping since 28 earlier
     fontWeight: "800",
     color: "#2563EB",
     textAlign: "center",
@@ -202,31 +201,31 @@ const styles = StyleSheet.create({
 
   // Stats Grid
   statsGrid: {
-    gap: 16,
+    gap: spacing.lg,
   },
   statsRow: {
     flexDirection: "row",
-    gap: 16,
+    gap: spacing.lg,
   },
   statCard: {
     flex: 1,
-    borderRadius: 24,
+    borderRadius: radius.xxl,
     borderWidth: 1,
-    padding: 20,
+    padding: spacing.xl,
     minHeight: 180,
   },
   statCount: {
-    fontSize: 32,
+    fontSize: typography.h1.fontSize, // 32
     fontWeight: "800",
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   statLabel: {
-    fontSize: 16,
+    fontSize: typography.body1.fontSize,
     fontWeight: "700",
-    marginBottom: 8,
+    marginBottom: spacing.sm,
   },
   statDescription: {
-    fontSize: 13,
+    fontSize: typography.caption.fontSize,
     lineHeight: 18,
     fontWeight: "500",
   },

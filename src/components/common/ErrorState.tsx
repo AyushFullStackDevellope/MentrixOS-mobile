@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   title: {
-    marginBottom: spacing.s,
+    marginBottom: spacing.sm,
     fontWeight: '700',
   },
   message: {
