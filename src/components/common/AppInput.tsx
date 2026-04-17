@@ -7,14 +7,15 @@ import { spacing, radius, typography } from "../../theme";
 export interface AppInputProps extends TextInputProps {
   containerStyle?: ViewStyle;
   rightIcon?: React.ReactNode;
+  leftIcon?: React.ReactNode;
 }
 
 /**
  * Common Input component with theme-aware styling and consistent layout
- * Supports a right-side icon slot (e.g., password eye toggle).
+ * Supports left and right-side icon slots.
  */
 export const AppInput = forwardRef<TextInput, AppInputProps>(
-  ({ containerStyle, rightIcon, ...props }, ref) => {
+  ({ containerStyle, rightIcon, leftIcon, ...props }, ref) => {
     const colors = useTheme();
 
     return (
@@ -30,6 +31,7 @@ export const AppInput = forwardRef<TextInput, AppInputProps>(
           containerStyle,
         ]}
       >
+        {leftIcon && <View style={styles.leftIconWrapper}>{leftIcon}</View>}
         <TextInput
           ref={ref}
           placeholderTextColor={colors.textSecondary}
@@ -57,6 +59,9 @@ const styles = StyleSheet.create({
   },
   rightIconWrapper: {
     marginLeft: spacing.sm,
+  },
+  leftIconWrapper: {
+    marginRight: spacing.sm,
   },
 });
 

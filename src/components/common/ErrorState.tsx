@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../hooks/useTheme';
+import { palette } from '../../theme/colors';
 import { AppText } from './AppText';
 import { AppButton } from './AppButton';
 import { spacing } from '../../theme/spacing';
@@ -21,21 +22,23 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
   icon,
   containerStyle,
 }) => {
+  const theme = useTheme();
+
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[styles.container, { backgroundColor: theme.background }, containerStyle]}>
       {icon ? (
         <View style={styles.iconContainer}>{icon}</View>
       ) : (
-        <View style={styles.defaultIcon}>
-          <AppText variant="h1" color={colors.error}>!</AppText>
+        <View style={[styles.defaultIcon, { backgroundColor: theme.error + '10' }]}>
+          <AppText variant="h1" color={theme.error}>!</AppText>
         </View>
       )}
       
-      <AppText variant="h3" color={colors.neutral[800]} style={styles.title} align="center">
+      <AppText variant="h3" color={theme.textPrimary} style={styles.title} align="center">
         {title}
       </AppText>
       
-      <AppText variant="body2" color={colors.neutral[600]} style={styles.message} align="center">
+      <AppText variant="body2" color={theme.textSecondary} style={styles.message} align="center">
         {message}
       </AppText>
       
@@ -57,7 +60,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.xl,
-    backgroundColor: colors.white,
   },
   iconContainer: {
     marginBottom: spacing.xl,
@@ -66,7 +68,6 @@ const styles = StyleSheet.create({
     width: normalize(80),
     height: normalize(80),
     borderRadius: normalize(40),
-    backgroundColor: colors.error + '10', // 10% opacity
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: spacing.xl,

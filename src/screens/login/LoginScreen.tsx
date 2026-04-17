@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AlertTriangle, Moon, Sun, Eye, EyeOff } from "lucide-react-native";
 import { layout } from "../../theme/layout";
@@ -21,7 +22,7 @@ import { useTheme } from "../../hooks/useTheme";
 import { AppButton } from "../../components/common/AppButton";
 import { AppInput } from "../../components/common/AppInput";
 import AppText from "../../components/common/AppText";
-import { spacing, radius, typography } from "../../theme";
+import { spacing, radius, typography, palette } from "../../theme";
 import {
   TopActionButtons,
   DividerWithText,
@@ -32,10 +33,15 @@ import {
 } from "../../components/auth/AuthComponents";
 import { LABELS } from "../../i18n/en";
 import { loginUser, getMyInstitutesAndRoles, selectUserContext } from "../../api/authApi";
-
 type AuthState = "initial" | "email-options" | "phone-options" | "email-otp" | "phone-otp" | "password";
 
-export default function LoginScreen({ navigation }: any) {
+import { RootStackParamList } from "../../navigation/types";
+
+type LoginScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, "Login">;
+};
+
+export default function LoginScreen({ navigation }: LoginScreenProps) {
   const { handleLoginSuccess, handleContextSelectionSuccess } = useAuth();
   const theme = useTheme();
 
@@ -64,14 +70,15 @@ export default function LoginScreen({ navigation }: any) {
   // ── Input change: detect email vs phone ───────────────────────────────────
   // Always resets auth state back to options — allows editing email even from password state
   const handleInputChange = (text: string) => {
-    setInputVal(text);
+    const trimmed = text.trim();
+    setInputVal(trimmed);
     setPassword(""); // clear password if user changes email
     
     // Check if we need to switch state (which might cause layout change/focus loss)
     let newState: AuthState = "initial";
-    if (text.length === 0) {
+    if (trimmed.length === 0) {
       newState = "initial";
-    } else if (/[a-zA-Z@]/.test(text)) {
+    } else if (/[a-zA-Z@]/.test(trimmed)) {
       newState = "email-options";
     } else {
       newState = "phone-options";
@@ -90,10 +97,10 @@ export default function LoginScreen({ navigation }: any) {
     }
     try {
       setLoading(true);
-      const loginData: any = await loginUser(inputVal.trim(), password.trim());
+      const loginData = await loginUser(inputVal.trim(), password.trim());
       
       // Robust token extraction — handles different backend naming conventions
-      const token = loginData.pre_context_token || loginData.preContextToken || loginData.token;
+      const token = loginData.pre_context_token;
       
       if (!token) {
         throw new Error("No session token received from server");
@@ -106,39 +113,11 @@ export default function LoginScreen({ navigation }: any) {
         institutes,
       });
 
-      // ── Streamline Skip Logic ─────────────────────────────────────────────
-      if (institutes.length === 1) {
-        const singleInst = institutes[0];
-        const roles = singleInst.roles || [];
-
-        if (roles.length === 1) {
-          // Exactly 1 institute and 1 role — skip both, jump to Dashboard
-          const singleRole = roles[0];
-          const contextData = await selectUserContext(token, {
-            tenant_id: singleInst.tenant_id,
-            institute_id: singleInst.institute_id,
-            role_id: singleRole.role_id,
-          });
-
-          await handleContextSelectionSuccess({
-            accessToken: contextData.access_token,
-            selectedInstitute: singleInst,
-            selectedRole: singleRole,
-          });
-          // App Navigator will load Dashboard automatically via Context rerender
-        } else if (roles.length > 1) {
-          // 1 institute but multiple roles — skip institute selection, jump to roles
-          navigation.replace("App", {
-            screen: "Role",
-            params: { selectedInstitute: singleInst }
-          });
-        }
-      } else {
-        // Multiple institutes — normal flow
-        navigation.replace("App");
-      }
-    } catch (error: any) {
-      Alert.alert("Login Failed", error.message || "Something went wrong");
+      // The App Navigator will mount automatically via RootNavigator Auth state change.
+      // We don't need to manually call navigation.replace("App") because LoginScreen is unmounted.
+    } catch (error) {
+      const err = error as Error;
+      Alert.alert("Login Failed", err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -241,7 +220,7 @@ export default function LoginScreen({ navigation }: any) {
             <AppInput
               placeholder={LABELS.login.passwordPlaceholder}
               value={password}
-              onChangeText={setPassword}
+              onChangeText={(text) => setPassword(text.trim())}
               secureTextEntry={!showPassword}
               containerStyle={styles.passwordInputSpacing}
               rightIcon={
@@ -412,8 +391,8 @@ const styles = StyleSheet.create({
   resendLink: { fontWeight: "500" },
   passwordInputSpacing: { marginBottom: spacing.lg },
   boldText: { fontWeight: "700" },
-  blueMetrics: { color: "#0073FF" },
-  grayText: { color: "#6B7280" },
+  blueMetrics: { color: palette.stats.blue },
+  grayText: { color: palette.neutral[500] },
   backButton: {
     marginTop: spacing.lg,
     alignItems: "center",

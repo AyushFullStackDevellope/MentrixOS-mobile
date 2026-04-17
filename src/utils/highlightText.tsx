@@ -1,11 +1,13 @@
 import React from "react";
+import { StyleProp, TextStyle } from "react-native";
 import AppText from "../components/common/AppText";
 
 type HighlightTextProps = {
   text: string;
   query: string;
-  textStyle?: any;
-  highlightStyle?: any;
+  textStyle?: StyleProp<TextStyle>;
+  highlightStyle?: StyleProp<TextStyle>;
+  numberOfLines?: number;
 };
 
 /**
@@ -16,9 +18,10 @@ export default function HighlightText({
   query,
   textStyle,
   highlightStyle,
+  numberOfLines,
 }: HighlightTextProps) {
   if (!query || !query.trim()) {
-    return <AppText style={textStyle}>{text}</AppText>;
+    return <AppText style={textStyle} numberOfLines={numberOfLines}>{text}</AppText>;
   }
 
   const safeQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -26,7 +29,7 @@ export default function HighlightText({
   const parts = text.split(regex);
 
   return (
-    <AppText style={textStyle}>
+    <AppText style={textStyle} numberOfLines={numberOfLines}>
       {parts.map((part, index) => {
         const isMatch = part.toLowerCase() === query.toLowerCase();
         return (

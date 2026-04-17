@@ -2,7 +2,7 @@ import appConfig from "../config/appConfig";
 
 type RequestOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
-  body?: any;
+  body?: unknown;
   token?: string | null;
 };
 
@@ -42,14 +42,14 @@ const apiClient = {
   }),
   post: async <T>(
     endpoint: string,
-    body?: any,
+    body?: unknown,
     token?: string | null,
   ): Promise<ApiResponse<T>> => ({
     data: await apiRequest<T>(endpoint, { method: "POST", body, token }),
   }),
   put: async <T>(
     endpoint: string,
-    body?: any,
+    body?: unknown,
     token?: string | null,
   ): Promise<ApiResponse<T>> => ({
     data: await apiRequest<T>(endpoint, { method: "PUT", body, token }),

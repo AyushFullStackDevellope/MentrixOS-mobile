@@ -10,7 +10,7 @@ export interface DashboardStats {
 
 export interface DashboardData {
   stats: DashboardStats[];
-  activities: any[];
+  activities: unknown[];
   quickActions: string[];
 }
 

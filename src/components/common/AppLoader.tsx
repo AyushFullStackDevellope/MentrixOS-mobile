@@ -6,7 +6,8 @@ import {
   Modal,
   ViewStyle,
 } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../hooks/useTheme';
+import { palette } from '../../theme/colors';
 import { AppText } from './AppText';
 import { spacing } from '../../theme/spacing';
 import { normalize } from '../../utils/responsive';
@@ -24,16 +25,17 @@ export const AppLoader: React.FC<AppLoaderProps> = ({
   overlay = false,
   containerStyle,
 }) => {
+  const theme = useTheme();
   if (!visible) return null;
 
   const LoaderContent = (
     <View style={[styles.container, overlay && styles.overlayContainer, containerStyle]}>
       <View style={styles.card}>
-        <ActivityIndicator size="large" color={colors.primary[600]} />
+        <ActivityIndicator size="large" color={theme.primary} />
         {message && (
           <AppText
             variant="body2"
-            color={colors.neutral[600]}
+            color={theme.textSecondary}
             style={styles.message}
             align="center"
           >
@@ -63,17 +65,17 @@ const styles = StyleSheet.create({
   },
   overlayContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: palette.overlay,
     ...StyleSheet.absoluteFillObject,
   },
   card: {
-    backgroundColor: colors.white,
+    backgroundColor: palette.white,
     padding: spacing.xxl,
     borderRadius: normalize(16),
     alignItems: 'center',
     justifyContent: 'center',
     minWidth: normalize(120),
-    shadowColor: '#000',
+    shadowColor: palette.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 10,

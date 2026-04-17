@@ -1,21 +1,29 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, StyleSheet, TextInput, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Search } from "lucide-react-native";
 import { LABELS } from "../../i18n/en";
 import { layout } from "../../theme/layout";
+import { spacing, radius, typography } from "../../theme";
 import InstituteCard from "../../components/institute/InstituteCard";
 import AppText from "../../components/common/AppText";
 import AppHeader from "../../components/common/AppHeader";
+import { AppInput } from "../../components/common/AppInput";
 import { useTheme } from "../../hooks/useTheme";
 import { useAuth } from "../../hooks/useAuth";
 import type { Institute } from "../../types/session";
+import { AppStackParamList } from "../../navigation/types";
+
+type InstituteSelectionScreenProps = {
+  navigation: StackNavigationProp<AppStackParamList, "Institute">;
+};
 
 /**
  * Institute Selection Screen
  * Displays backend institutes from AuthContext, allows search & selection.
  */
-export default function InstituteSelectionScreen({ navigation }: any) {
+export default function InstituteSelectionScreen({ navigation }: InstituteSelectionScreenProps) {
   const theme = useTheme();
   const { institutes, user } = useAuth();
   const [search, setSearch] = useState("");
@@ -67,23 +75,22 @@ export default function InstituteSelectionScreen({ navigation }: any) {
 
           <View style={styles.heroSection}>
             <AppText style={[styles.greeting, { color: theme.textPrimary }]}>
-              {`Hi, ${user?.full_name?.split(' ')[0] || 'Ayush'}`}
+              {`Hi, ${user?.full_name?.split(' ')[0] || 'Ayush'}! 👋`}
             </AppText>
             <AppText style={[styles.subtitle, { color: theme.textSecondary }]}>
               {LABELS.institute.subtitle}
             </AppText>
           </View>
 
-          <View style={[styles.searchBox, { backgroundColor: theme.card, borderColor: theme.border }]}>
-            <Search size={18} color={theme.textSecondary} style={styles.searchIcon} />
-            <TextInput
-              placeholder={LABELS.institute.searchPlaceholder}
-              placeholderTextColor={theme.textSecondary}
-              value={search}
-              onChangeText={setSearch}
-              style={[styles.searchInput, { color: theme.textPrimary }]}
-            />
-          </View>
+          <AppInput
+            containerStyle={[styles.searchBox, { backgroundColor: theme.card, borderColor: theme.border }]}
+            leftIcon={<Search size={18} color={theme.textSecondary} />}
+            placeholder={LABELS.institute.searchPlaceholder}
+            placeholderTextColor={theme.textSecondary}
+            value={search}
+            onChangeText={setSearch}
+            style={[styles.searchInput, { color: theme.textPrimary }]}
+          />
 
           <View style={styles.listSection}>
             {filteredInstitutes.length === 0 ? (
@@ -128,25 +135,61 @@ export default function InstituteSelectionScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1 },
-  contentContainer: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 48 },
-  heroSection: { alignItems: "center", marginBottom: 28 },
-  greeting: { fontSize: 24, fontWeight: "800", marginBottom: 4 },
-  subtitle: { fontSize: 14, fontWeight: "400" },
+  contentContainer: { 
+    paddingHorizontal: spacing.xl, 
+    paddingTop: spacing.md, 
+    paddingBottom: spacing.xxxl 
+  },
+  heroSection: { alignItems: "center", marginBottom: spacing.xl },
+  greeting: { 
+    fontSize: typography.h2.fontSize, 
+    fontWeight: "800", 
+    marginBottom: spacing.xs
+  },
+  subtitle: { 
+    fontSize: typography.body2.fontSize, 
+    fontWeight: "400",
+    textAlign: "center",
+    paddingHorizontal: spacing.xl,
+  },
   searchBox: {
-    height: 52,
-    borderRadius: 50,
+    height: 54,
+    borderRadius: 999, // Pill shape matching screenshot
     borderWidth: 1,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 18,
     marginBottom: 20,
   },
-  searchIcon: { marginRight: 10 },
-  searchInput: { flex: 1, fontSize: 15, fontWeight: "400", paddingVertical: 0 },
+  searchIcon: { marginRight: spacing.sm },
+  searchInput: { 
+    flex: 1, 
+    fontSize: typography.body1.fontSize, 
+    fontWeight: "400", 
+    paddingVertical: 0 
+  },
   listSection: { minHeight: 200 },
-  emptyBox: { borderWidth: 1, borderRadius: 16, padding: 28, alignItems: "center" },
-  emptyTitle: { fontSize: 17, fontWeight: "700", marginBottom: 4 },
-  emptySubtitle: { fontSize: 14, lineHeight: 20, textAlign: "center" },
-  supportText: { fontSize: 13, textAlign: "center", marginTop: 48, lineHeight: 20 },
+  emptyBox: { 
+    borderWidth: 1, 
+    borderRadius: radius.lg, 
+    padding: spacing.xxl, 
+    alignItems: "center" 
+  },
+  emptyTitle: { 
+    fontSize: typography.body1.fontSize, 
+    fontWeight: "700", 
+    marginBottom: spacing.xs 
+  },
+  emptySubtitle: { 
+    fontSize: typography.caption.fontSize, 
+    lineHeight: 20, 
+    textAlign: "center" 
+  },
+  supportText: { 
+    fontSize: typography.caption.fontSize, 
+    textAlign: "center", 
+    marginTop: spacing.xxxl, 
+    lineHeight: 20 
+  },
   supportEmail: { fontWeight: "600" },
 });

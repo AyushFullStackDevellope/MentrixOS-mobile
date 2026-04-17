@@ -21,10 +21,12 @@ export interface LoginRequest {
   otp?: string;
 }
 
+import type { Institute, User as SessionUser } from './session';
+
 export interface LoginResponse {
   token: string;
-  user: User;
-  institutes: any[]; // Define mapping if needed
+  user: SessionUser;
+  institutes: Institute[];
 }
 
 export interface UserProfileResponse {

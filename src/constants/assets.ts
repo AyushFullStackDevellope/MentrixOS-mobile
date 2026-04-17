@@ -3,7 +3,7 @@
  * Used for both Institute and Role selection screens
  */
 
-export const localLogos: Record<string, any> = {
+export const localLogos: Record<string, number> = {
   "logo-one.png": require("../../assets/institute-logos/logo-one.png"),
   "logo-two.png": require("../../assets/institute-logos/logo-two.png"),
   "logo-three.png": require("../../assets/institute-logos/logo-three.png"),

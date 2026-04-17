@@ -6,12 +6,7 @@ import InstituteSelectionScreen from "../screens/institute/InstituteSelectionScr
 import RoleSelectionScreen from "../screens/role/RoleSelectionScreen";
 import DashboardScreen from "../screens/dashboard/DashboardScreen";
 
-// Typed route params for each screen in the app flow
-export type AppStackParamList = {
-  Institute: undefined;
-  Role: { selectedInstitute: Institute };
-  Dashboard: { selectedInstitute: Institute; selectedRole: InstituteRole };
-};
+import { AppStackParamList } from "./types";
 
 import { useAuth } from "../hooks/useAuth";
 

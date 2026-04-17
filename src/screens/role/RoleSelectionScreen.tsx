@@ -14,7 +14,7 @@ import {
 } from "lucide-react-native";
 import { LABELS } from "../../i18n/en";
 import { layout } from "../../theme/layout";
-import { spacing, radius, typography } from "../../theme";
+import { spacing, radius, typography, palette } from "../../theme";
 import AppText from "../../components/common/AppText";
 import AppHeader from "../../components/common/AppHeader";
 import { useTheme } from "../../hooks/useTheme";
@@ -70,8 +70,9 @@ export default function RoleSelectionScreen({ navigation, route }: RoleSelection
       });
 
       navigation.replace("Dashboard", { selectedInstitute, selectedRole: role });
-    } catch (error: any) {
-      Alert.alert("Role Selection Failed", error.message || "Something went wrong");
+    } catch (error) {
+      const err = error as Error;
+      Alert.alert("Role Selection Failed", err.message || "Something went wrong");
     } finally {
       setLoadingRoleId(null);
     }
@@ -85,21 +86,21 @@ export default function RoleSelectionScreen({ navigation, route }: RoleSelection
     
     // Management/Admin -> Purple Shield
     if (name.includes('admin') || name.includes('management')) 
-      return { Icon: ShieldCheck, color: '#7C3AED', bgColor: '#F5F3FF' };
+      return { Icon: ShieldCheck, color: theme.branding.admin, bgColor: theme.branding.adminBg };
     
     // Faculty/Teacher -> Green UserSquare (More professional/instructive than student cap)
     if (name.includes('teacher') || name.includes('faculty') || name.includes('staff')) 
-      return { Icon: UserSquare2, color: '#059669', bgColor: '#ECFDF5' };
+      return { Icon: UserSquare2, color: theme.branding.faculty, bgColor: theme.branding.facultyBg };
     
     // Student -> Blue Graduation Cap (Education-focused)
     if (name.includes('student')) 
-      return { Icon: GraduationCap, color: '#2563EB', bgColor: '#EFF6FF' };
+      return { Icon: GraduationCap, color: theme.branding.student, bgColor: theme.branding.studentBg };
     
     // Parent -> Orange Users (Family-focused)
     if (name.includes('parent')) 
-      return { Icon: Users, color: '#EA580C', bgColor: '#FFF7ED' };
+      return { Icon: Users, color: theme.branding.parent, bgColor: theme.branding.parentBg };
     
-    return { Icon: UserIcon, color: '#64748B', bgColor: '#F8FAFC' };
+    return { Icon: UserIcon, color: theme.branding.default, bgColor: theme.branding.defaultBg };
   };
 
   // Image source for the institute branding
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: spacing.md,
-    backgroundColor: '#FFFFFF', // White background for the logo itself
+    backgroundColor: palette.white, // White background for the logo itself
     overflow: 'hidden',
   },
   instituteLogo: {

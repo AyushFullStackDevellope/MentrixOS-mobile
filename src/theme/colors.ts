@@ -35,8 +35,8 @@ export const palette = {
     600: '#4B5563',
     700: '#374151',
     800: '#1F2937',
-    900: '#111827',
-    950: '#030712',
+    900: '#000000',
+    950: '#101010',
   },
   success: '#10B981',
   warning: '#F76C1D',
@@ -44,6 +44,29 @@ export const palette = {
   info: '#3B82F6',
   white: '#FFFFFF',
   black: '#000000',
+  transparent: 'transparent',
+  overlay: 'rgba(0, 0, 0, 0.4)',
+  // Highlights & Stats
+  stats: {
+    blue: '#2563EB',
+    green: '#10B981',
+    orange: '#F59E0B',
+    purple: '#8B5CF6',
+  },
+  // Branding Extras
+  branding: {
+    avatar: '#E98C45',
+    admin: '#7C3AED',
+    adminBg: '#F5F3FF',
+    faculty: '#059669',
+    facultyBg: '#ECFDF5',
+    student: '#2563EB',
+    studentBg: '#EFF6FF',
+    parent: '#EA580C',
+    parentBg: '#FFF7ED',
+    default: '#64748B',
+    defaultBg: '#F8FAFC',
+  },
 };
 
 
@@ -66,6 +89,11 @@ export const lightColors = {
   info: palette.info,
   white: palette.white,
   black: palette.black,
+  transparent: palette.transparent,
+  overlay: palette.overlay,
+  // Highlighting/Branding
+  stats: palette.stats,
+  branding: palette.branding,
 };
 
 export const darkColors = {
@@ -83,4 +111,16 @@ export const darkColors = {
   info: palette.info,
   white: palette.white,
   black: palette.black,
+  transparent: palette.transparent,
+  overlay: 'rgba(0, 0, 0, 0.6)', // slightly darker for dark mode if needed
+  // Highlighting/Branding (can be adjusted for dark mode visibility)
+  stats: palette.stats,
+  branding: {
+    ...palette.branding,
+    adminBg: palette.neutral[700],
+    facultyBg: palette.neutral[700],
+    studentBg: palette.neutral[700],
+    parentBg: palette.neutral[700],
+    defaultBg: palette.neutral[700],
+  },
 };

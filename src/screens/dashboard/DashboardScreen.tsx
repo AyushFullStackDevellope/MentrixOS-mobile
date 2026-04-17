@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Moon, Sun, Bell } from "lucide-react-native";
 import AppText from "../../components/common/AppText";
 import AppHeader from "../../components/common/AppHeader";
-import { layout, spacing, radius, typography } from "../../theme";
+import { layout, spacing, radius, typography, palette } from "../../theme";
 import { useTheme } from "../../hooks/useTheme";
 import { useAuth } from "../../hooks/useAuth";
 import type { AppStackParamList } from "../../navigation/AppNavigator";
@@ -83,7 +83,7 @@ export default function DashboardScreen({ route }: DashboardScreenProps) {
 
                 {/* Profile Avatar (Click for Logout Alert) */}
                 <TouchableOpacity activeOpacity={0.7} onPress={handleLogout}>
-                  <View style={[styles.avatarCircle, { backgroundColor: "#E98C45", borderColor: theme.border }]}>
+                  <View style={[styles.avatarCircle, { backgroundColor: theme.branding.avatar, borderColor: theme.border }]}>
                     <AppText style={styles.initialsText}>
                       {user?.full_name ? (user.full_name.split(' ')[0][0] + (user.full_name.split(' ').length > 1 ? user.full_name.split(' ')[1][0] : '')).toUpperCase() : "MJ"}
                     </AppText>
@@ -110,13 +110,13 @@ export default function DashboardScreen({ route }: DashboardScreenProps) {
                 count="08" 
                 label="Active Institutes" 
                 description="Institutes actively operating and using the platform." 
-                countColor="#2563EB" 
+                countColor={theme.stats.blue} 
               />
               <StatCard 
                 count="05" 
                 label="Inactive Institutes" 
                 description="Institutes currently inactive in system." 
-                countColor="#10B981" 
+                countColor={theme.stats.green} 
               />
             </View>
             <View style={styles.statsRow}>
@@ -124,13 +124,13 @@ export default function DashboardScreen({ route }: DashboardScreenProps) {
                 count="15+" 
                 label="Total Modules" 
                 description="Features enabling workflows." 
-                countColor="#F59E0B" 
+                countColor={theme.stats.orange} 
               />
               <StatCard 
                 count="50+" 
                 label="Total Users" 
                 description="Registered users across institutes." 
-                countColor="#8B5CF6" 
+                countColor={theme.stats.purple} 
               />
             </View>
           </View>
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   initialsText: {
     fontSize: typography.body1.fontSize,
     fontWeight: '700',
-    color: '#FFF',
+    color: palette.white,
   },
 
   // Welcome Section
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: typography.h1.fontSize, // approx mapping since 28 earlier
     fontWeight: "800",
-    color: "#2563EB",
+    color: palette.stats.blue,
     textAlign: "center",
   },
 

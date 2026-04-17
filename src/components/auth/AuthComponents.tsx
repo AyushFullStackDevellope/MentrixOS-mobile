@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
-import { View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData } from 'react-native';
 import { QrCode, ChevronRight } from 'lucide-react-native';
 import { useTheme } from '../../hooks/useTheme';
 import AppText from '../common/AppText';
+import { AppInput } from '../common/AppInput';
 import { LABELS } from '../../i18n/en';
+import { palette } from '../../theme';
 
 interface TopNavProps {
   onThemeToggle: () => void;
@@ -102,7 +104,7 @@ export const OtpInputGroup: React.FC<{ value: string[], onChange: (val: string[]
     }
   };
 
-  const handleKeyPress = (e: any, index: number) => {
+  const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
     if (e.nativeEvent.key === 'Backspace' && !value[index] && index > 0) {
       inputs.current[index - 1]?.focus();
     }
@@ -111,10 +113,11 @@ export const OtpInputGroup: React.FC<{ value: string[], onChange: (val: string[]
   return (
     <View style={styles.otpContainer}>
       {value.map((digit, index) => (
-        <TextInput
+        <AppInput
           key={index}
           ref={(ref) => { inputs.current[index] = ref; }}
-          style={[styles.otpInput, { backgroundColor: theme.card, borderColor: theme.border, color: theme.textPrimary }]}
+          containerStyle={[styles.otpInput, { backgroundColor: theme.card, borderColor: theme.border }]}
+          style={[styles.otpInputText, { color: theme.textPrimary }]}
           value={digit}
           onChangeText={(text) => handleChangeText(text, index)}
           onKeyPress={(e) => handleKeyPress(e, index)}
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginTop: 40,
     marginBottom: 20,
-    shadowColor: '#000',
+    shadowColor: palette.black,
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 2,
@@ -220,6 +223,9 @@ const styles = StyleSheet.create({
     height: 56,
     borderWidth: 1,
     borderRadius: 12,
+    paddingHorizontal: 0,
+  },
+  otpInputText: {
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '600',

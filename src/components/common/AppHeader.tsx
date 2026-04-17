@@ -4,6 +4,7 @@ import { User } from 'lucide-react-native';
 import { useTheme } from '../../hooks/useTheme';
 import { useAuth } from '../../hooks/useAuth';
 import AppText from './AppText';
+import { palette } from '../../theme';
 
 interface AppHeaderProps {
   /** Optional right-side slot — defaults to a user initials circle if logged in */
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: -0.3,
     // "OS" always blue regardless of theme
-    color: '#2563EB',
+    color: palette.stats.blue,
   },
   avatarCircle: {
     width: 44,

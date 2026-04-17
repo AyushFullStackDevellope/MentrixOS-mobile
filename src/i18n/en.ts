@@ -53,8 +53,8 @@ export const LABELS = {
   },
   institute: {
     title: 'Select Institute',
-    subtitle: 'Choose the institute you want to access',
-    searchPlaceholder: 'Search by name or code...',
+    subtitle: 'Select your institute to access your personalized dashboard',
+    searchPlaceholder: 'Search your institute...',
     noResults: 'No institutes found',
     brand: 'MentrixOS',
     greeting: 'Welcome back!',

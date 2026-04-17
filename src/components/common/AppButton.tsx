@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import type { ViewStyle, TextStyle } from "react-native";
 import { useTheme } from "../../hooks/useTheme";
 import AppText from "./AppText";
-import { spacing, radius, typography } from "../../theme";
+import { spacing, radius, typography, palette } from "../../theme";
 
 interface AppButtonProps {
   title: string;
@@ -32,11 +32,11 @@ export const AppButton: React.FC<AppButtonProps> = ({
   const getVariantStyle = () => {
     switch (variant) {
       case 'secondary':
-        return { backgroundColor: colors.secondary || '#6B7280' };
+        return { backgroundColor: colors.secondary || palette.neutral[500] };
       case 'outline':
-        return { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.primary };
+        return { backgroundColor: palette.transparent, borderWidth: 1, borderColor: colors.primary };
       case 'ghost':
-        return { backgroundColor: 'transparent' };
+        return { backgroundColor: palette.transparent };
       default:
         return { backgroundColor: colors.primary };
     }
@@ -48,7 +48,7 @@ export const AppButton: React.FC<AppButtonProps> = ({
       case 'ghost':
         return { color: colors.primary };
       default:
-        return { color: '#fff' };
+        return { color: palette.white };
     }
   };
 
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   text: {
-    color: "#fff",
+    color: palette.white,
     fontWeight: "600",
     fontSize: typography.body1?.fontSize || 16,
   },

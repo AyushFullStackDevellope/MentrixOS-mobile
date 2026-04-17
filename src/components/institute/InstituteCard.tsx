@@ -1,14 +1,11 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-} from "react-native";
+import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
+import AppText from "../common/AppText";
+import { palette } from "../../theme";
 import HighlightText from "../../utils/highlightText";
 import { useTheme } from "../../hooks/useTheme";
 import { getInstituteImageSource } from "../../constants/assets";
+import { MapPin, ChevronRight } from "lucide-react-native";
 
 type InstituteItem = {
   id: string;
@@ -25,19 +22,19 @@ type Props = {
   onPress: () => void;
 };
 
-/**
- * Institute Card component — recently redesigned by user, now restored with local logo support.
- */
 export default function InstituteCard({ item, search, onPress }: Props) {
   const theme = useTheme();
-  const metaText = `${item.city || ""}${item.city && item.state ? ", " : ""}${item.state || ""}`;
 
-  // Decide image source using shared utility
+  const metaText =
+    item.city && item.state
+      ? `${item.city} ${item.state}`
+      : item.city || item.state || "Location not available";
+
   const imageSource = getInstituteImageSource(item.logo);
 
   return (
     <TouchableOpacity
-      activeOpacity={0.9}
+      activeOpacity={0.85}
       onPress={onPress}
       style={[
         styles.card,
@@ -47,60 +44,47 @@ export default function InstituteCard({ item, search, onPress }: Props) {
         },
       ]}
     >
-      <View style={styles.leftSection}>
+      {/* LEFT: Logo */}
+      <View style={styles.logoWrap}>
         {imageSource ? (
           <Image source={imageSource} style={styles.logo} resizeMode="contain" />
         ) : (
-          <View
-            style={[
-              styles.logoFallback,
-              {
-                backgroundColor: theme.background,
-                borderColor: theme.border,
-              },
-            ]}
-          >
-            <Text style={[styles.logoText, { color: theme.textPrimary }]}>
+          <View style={[styles.logoFallback, { backgroundColor: theme.background, borderColor: theme.border }]}>
+            <AppText style={[styles.logoInitial, { color: theme.textPrimary }]}>
               {item.name?.charAt(0)?.toUpperCase() || "I"}
-            </Text>
+            </AppText>
           </View>
         )}
+      </View>
 
-        <View style={styles.content}>
+      {/* CENTER: Name + Location */}
+      <View style={styles.centerContent}>
+        <HighlightText
+          text={item.name || ""}
+          query={search}
+          numberOfLines={1}
+          textStyle={[styles.name, { color: theme.textPrimary }]}
+          highlightStyle={[styles.nameHighlight, { color: theme.info }]}
+        />
+        <View style={styles.locationRow}>
+          <MapPin size={11} color={theme.textSecondary} style={styles.pinIcon} />
           <HighlightText
-            text={item.name || ""}
+            text={metaText}
             query={search}
-            textStyle={[styles.name, { color: theme.textPrimary }]}
-            highlightStyle={[styles.highlight, { color: theme.info }]}
+            numberOfLines={1}
+            textStyle={[styles.location, { color: theme.textSecondary }]}
+            highlightStyle={[styles.locationHighlight, { color: theme.info }]}
           />
-
-          <View style={styles.locationRow}>
-            <Text style={[styles.locationIcon, { color: theme.textSecondary }]}>⌖</Text>
-            <HighlightText
-              text={metaText}
-              query={search}
-              textStyle={[styles.location, { color: theme.textSecondary }]}
-              highlightStyle={[styles.highlightLocation, { color: theme.info }]}
-            />
-          </View>
         </View>
       </View>
 
+      {/* RIGHT: Type label + Arrow (horizontal row) */}
       <View style={styles.rightSection}>
-        <Text style={[styles.type, { color: theme.textSecondary }]}>
+        <AppText style={[styles.typeLabel, { color: theme.textSecondary }]} numberOfLines={1}>
           {item.type || ""}
-        </Text>
-
-        <View
-          style={[
-            styles.arrowBox,
-            {
-              backgroundColor: theme.background,
-              borderColor: theme.border,
-            },
-          ]}
-        >
-          <Text style={[styles.arrow, { color: theme.textPrimary }]}>›</Text>
+        </AppText>
+        <View style={[styles.arrowBox, { backgroundColor: theme.background, borderColor: theme.border }]}>
+          <ChevronRight size={18} color={theme.textPrimary} />
         </View>
       </View>
     </TouchableOpacity>
@@ -109,90 +93,89 @@ export default function InstituteCard({ item, search, onPress }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    minHeight: 96,
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: 16,
+    borderRadius: 16,
+    paddingHorizontal: 14,
     paddingVertical: 14,
-    marginBottom: 14,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    marginBottom: 10,
   },
-  leftSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    paddingRight: 12,
+
+  // Logo
+  logoWrap: {
+    marginRight: 12,
   },
   logo: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
-    backgroundColor: "#FFFFFF",
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: palette.white,
   },
   logoFallback: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  logoText: {
-    fontSize: 22,
+  logoInitial: {
+    fontSize: 20,
     fontWeight: "700",
   },
-  content: {
-    marginLeft: 14,
+
+  // Center content
+  centerContent: {
     flex: 1,
+    justifyContent: "center",
   },
   name: {
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 16,
     fontWeight: "700",
-    marginBottom: 6,
+    marginBottom: 4,
+    lineHeight: 20,
   },
-  highlight: {
+  nameHighlight: {
     fontWeight: "800",
   },
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
   },
-  locationIcon: {
-    fontSize: 16,
-    marginRight: 6,
+  pinIcon: {
+    marginRight: 4,
   },
   location: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 12,
     fontWeight: "500",
+    lineHeight: 16,
+    flexShrink: 1,
   },
-  highlightLocation: {
+  locationHighlight: {
     fontWeight: "700",
   },
+
+  // Right section — horizontal row: [Type Label]  [> Arrow]
   rightSection: {
-    alignItems: "flex-end",
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 8,
+    gap: 10,
   },
-  type: {
-    fontSize: 15,
-    fontWeight: "700",
-    textTransform: "lowercase",
-    marginBottom: 10,
+  typeLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    textAlign: "right",
+    flexShrink: 1,
   },
   arrowBox: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
+    width: 34,
+    height: 34,
+    borderRadius: 10,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  arrow: {
-    fontSize: 30,
-    lineHeight: 30,
-    marginTop: -2,
+    flexShrink: 0,
   },
 });

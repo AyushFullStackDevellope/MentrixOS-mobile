@@ -19,7 +19,7 @@ export const layout = {
   
   // Adaptive container helper styles
   adaptiveContainer: {
-    width: '100%' as any,
+    width: '100%' as const,
     maxWidth: 720,
     alignSelf: 'center' as const,
   }
